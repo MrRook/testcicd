@@ -63,7 +63,7 @@ jobs:
         with:
           s3_bucket: codeguru-reviewer-test-cicd-bucket-harshit-pdx
           build_path: 'buildFiles'
-          build_path_list: samplelib1 samplelib2
+          #build_path_list: samplelib1 samplelib2
           
       - name: Upload review result
         if: ${{ github.event_name != 'push' }}
