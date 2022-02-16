@@ -53,7 +53,7 @@ jobs:
         uses: aws-actions/codeguru-reviewer@v1.1
         if: ${{ always() }}
         with:
-          s3_bucket: codeguru-reviewer-test-cicd-bucket-yueny
+          s3_bucket: codeguru-reviewer-test-cicd-bucket-harshit-pdx
           build_path: 'buildFiles'
 
       - name: Upload review result
