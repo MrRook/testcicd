@@ -54,7 +54,7 @@ jobs:
         if: ${{ always() }}
         with:
           s3_bucket: codeguru-reviewer-test-cicd-bucket-yueny
-          build_path: 'buildFiles'
+          build_path: target
 
       - name: Upload review result
         if: ${{ github.event_name != 'push' }}
