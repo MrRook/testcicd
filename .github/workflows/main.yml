@@ -61,7 +61,7 @@ jobs:
         uses: ./.github/actions
         if: ${{ always() }}
         with:
-          s3_bucket: codeguru-reviewer-test-cicd-bucket-harshit-pdx
+          s3_bucket: codeguru-reviewer-test-cicd-bucket-harshit-iad-prod
           build_path: 'buildFiles'
           #build_path_list: samplelib1 samplelib2
           
