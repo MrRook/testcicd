@@ -1,5 +1,4 @@
 name: Test
-##
 on:
   workflow_dispatch:
     inputs:
@@ -12,22 +11,13 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Respository
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
 
       - name: Configure AWS Credentials ECR
         uses: aws-actions/configure-aws-credentials@v1
@@ -35,44 +25,30 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          #aws-region: us-west-2
           aws-region: us-east-1
 
       - name: ECR Login
+        id: login-to-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          # registries: ${{ secrets.REGISTRY_ACCOUNT_ID }}
-          registries: ${{ secrets.REGISTRY_ACCOUNT_ID_PROD }}
+          registries: ${{ secrets.REGISTRY_ACCOUNT_ID }}
+          aws-region: us-east-1
 
       - name: Docker Pull
         run: |
-          # docker pull ${{ secrets.ECR_URI }}
-          docker pull ${{ secrets.ECR_URI_PROD }}
-          # docker image tag ${{ secrets.ECR_URI }} codeguru:latest
-          docker image tag ${{ secrets.ECR_URI_PROD }} codeguru:latest
-      
-      - name: change the file timestamp before 1980
-        run: 
-          stat file_with_timestamp_before_1980.txt; 
-          touch -a -m -t 191512180130.09 file_with_timestamp_before_1980.txt; 
-          stat file_with_timestamp_before_1980.txt;
-          
+          echo "Swaraj ${{ steps.login-to-ecr.outputs.registry }}"
+          docker pull ${{ secrets.ECR_URI }}
+          docker image tag ${{ secrets.ECR_URI }} codeguru:latest
+
       - name: test using local action yml
         uses: ./.github/actions
         if: ${{ always() }}
         with:
-          s3_bucket: codeguru-reviewer-test-cicd-bucket-harshit-iad-prod
-          build_path: 'buildFiles'
-          #build_path_list: samplelib1 samplelib2
-          
+          source_path: .
+
       - name: Upload review result
         if: ${{ github.event_name != 'push' }}
         uses: github/codeql-action/upload-sarif@v1
         with:
-          sarif_file: codeguru-results.sarif.json
-
-      - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v2
-        with:
-          name: sarif_results
-          path: codeguru-results*.json        
+          sarif_file: codeguru-security-results.sarif.json
+          
