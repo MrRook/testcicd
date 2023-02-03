@@ -36,7 +36,6 @@ jobs:
 
       - name: Docker Pull
         run: |
-          echo "Swaraj ${{ steps.login-to-ecr.outputs.registry }}"
           docker pull ${{ secrets.ECR_URI }}
           docker image tag ${{ secrets.ECR_URI }} codeguru:latest
 
@@ -46,6 +45,9 @@ jobs:
         with:
           source_path: .
           aws_region: us-east-1
+      - name: list files
+        run: |
+          ls -l
 
       - name: Upload review result
         if: ${{ github.event_name != 'push' }}
