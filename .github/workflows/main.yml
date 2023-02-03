@@ -45,7 +45,7 @@ jobs:
         if: ${{ always() }}
         with:
           source_path: .
-          aws_region: us-west-2
+          aws_region: us-east-1
 
       - name: Upload review result
         if: ${{ github.event_name != 'push' }}
