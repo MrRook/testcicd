@@ -8,9 +8,15 @@ inputs:
     description: 'Path to source repository'
     default: .
     required: false
+  aws_region:
+    description: 'AWS region where you want to run workflow'
+    required: true
 runs:
   using: docker
   image: docker://codeguru:latest
   args:
    - --source_path
    - ${{ inputs.source_path }}
+   - --aws_region
+   - ${{ inputs.aws_region }}
+   
