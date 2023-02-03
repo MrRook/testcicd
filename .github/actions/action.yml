@@ -19,4 +19,6 @@ runs:
    - ${{ inputs.source_path }}
    - --aws_region
    - ${{ inputs.aws_region }}
+   - --output_file
+   - codeguru-security-results
    
