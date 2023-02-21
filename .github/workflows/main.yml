@@ -48,6 +48,10 @@ jobs:
       - name: list files
         run: |
           ls -l
+          
+      - name: print content
+        run: |
+          cat codeguru-results.sarif.json
 
       - name: Upload review result
         if: ${{ github.event_name != 'push' }}
